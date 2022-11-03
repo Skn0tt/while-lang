@@ -5,8 +5,7 @@
   "dependencies": {
     "monaco-editor": "^0.34.1",
     "parcel": "^2.7.0",
-    "tspeg": "^3.2.1",
-    "vite": "^3.2.2"
+    "tspeg": "^3.2.1"
   },
   "devDependencies": {
     "buffer": "^6.0.3",
