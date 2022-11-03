@@ -136,6 +136,8 @@ async function execute(debug: boolean) {
     return;
   }
 
+  resultEl.innerText = "";
+
   const result = await interpret(
     ast,
     getInputs(),
