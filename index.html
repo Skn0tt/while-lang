@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WHILE Lang</title>
+  </head>
+  <body>
+    <section>
+      <h1 style="display: inline"><code>WHILE</code> lang</h1>
+      <button id="run">Run</button>
+      <button id="debug">Debug</button>
+      <button id="step">Step</button>
+      <label>
+        Inputs
+        <input id="inputs" placeholder="1,2,3"></input>
+      </label>
+
+      <label>
+        Memory
+        <span id="memory"></span>
+      </label>
+      
+    </section>
+
+
+
+    <span id="parsing-errors"></span>
+
+    <section class="editor-container">
+      <div id="editor"></div>
+    </section>
+
+    <link rel="stylesheet" href="./index.css" />
+    <script type="module" src="./index.ts"></script>
+  </body>
+</html>

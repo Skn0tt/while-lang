@@ -1,2 +1,4 @@
 node_modules
 while-lang.generated.ts
+dist
+.parcel-cache
