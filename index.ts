@@ -114,7 +114,8 @@ editor.getModel()?.onDidChangeContent(() => {
 });
 
 const inputsEl = document.getElementById("inputs") as HTMLInputElement;
-const memoryEl = document.getElementById("memory") as HTMLParagraphElement;
+const memoryEl = document.getElementById("memory") as HTMLSpanElement;
+const resultEl = document.getElementById("result") as HTMLSpanElement;
 
 function getInputs(): number[] {
   return inputsEl.value.split(",").map((x) => parseInt(x));
@@ -135,8 +136,12 @@ async function execute(debug: boolean) {
     return;
   }
 
-  const result = await interpret(ast, getInputs(), debug ? waitForStep : undefined);
-  memoryEl.innerText = "Result: " + result;
+  const result = await interpret(
+    ast,
+    getInputs(),
+    debug ? waitForStep : undefined
+  );
+  resultEl.innerText = "" + result;
 }
 
 document.getElementById("run")!.onclick = () => {
