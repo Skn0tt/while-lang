@@ -1,0 +1,11 @@
+Program := '\s*' Atom | While | Concatenation
+
+Concatenation := Program '\s*;\s*' Program
+Atom := Addition | Subtraction
+Addition := left=Variable '\s*:=\s*' right=Variable '\s*\+\s*' c=Constant
+Subtraction := Variable '\s*:=\s*' Variable '\s*\-\s*' Constant
+Constant := _value='[0-9]+'
+  .value = number { return parseInt(this._value); }
+Variable := 'x'_i='[0-9]+'
+  .i = number { return parseInt(this._i); }
+While := '\s*WHILE\s*' Variable '\s*!=\s*0\s*DO\s*' Program '\s*END\s*'
