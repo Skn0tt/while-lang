@@ -1,5 +1,5 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-import { interpret, parse } from "./while-lang";
+import { interpret, parse, Memory } from "./while-lang";
 
 // based on "formula" preset from https://microsoft.github.io/monaco-editor/monarch.html
 const syntaxHighlighting: monaco.languages.IMonarchLanguage = {
@@ -120,7 +120,14 @@ function getInputs(): number[] {
   return inputsEl.value.split(",").map((x) => parseInt(x));
 }
 
-document.getElementById("run")!.onclick = () => {
+const waitForStep = (memory: Memory) => {
+  memoryEl.innerText = memory.toString();
+  return new Promise<void>((resolve) => {
+    document.getElementById("step")!.onclick = () => resolve();
+  });
+};
+
+async function execute(debug: boolean) {
   const code = editor.getModel()?.getValue() ?? "";
   const { ast, errs } = parse(code);
   if (errs.length > 0 || !ast) {
@@ -128,10 +135,14 @@ document.getElementById("run")!.onclick = () => {
     return;
   }
 
-  const result = interpret(ast, getInputs());
-  memoryEl.innerText = "" + result;
+  const result = await interpret(ast, getInputs(), debug ? waitForStep : undefined);
+  memoryEl.innerText = "Result: " + result;
+}
+
+document.getElementById("run")!.onclick = () => {
+  execute(false);
 };
 
-document.getElementById("debug")!.onclick = () => {};
-
-document.getElementById("step")!.onclick = () => {};
+document.getElementById("debug")!.onclick = () => {
+  execute(true);
+};

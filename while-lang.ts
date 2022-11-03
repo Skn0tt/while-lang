@@ -21,7 +21,7 @@ class Stack<T> {
   }
 }
 
-class Memory {
+export class Memory {
   private data: Record<number, number> = {};
 
   constructor(input: number[]) {
@@ -39,9 +39,17 @@ class Memory {
     }
     this.data[address] = value;
   }
+
+  toString() {
+    return Object.values(this.data).toString();
+  }
 }
 
-export function interpret(program: Program, input: number[]) {
+export async function interpret(
+  program: Program,
+  input: number[],
+  waitForStep?: (memory: Memory) => Promise<void>
+) {
   const callstack = new Stack<Program>();
   const memory = new Memory(input);
 
@@ -49,6 +57,7 @@ export function interpret(program: Program, input: number[]) {
 
   while (!callstack.isEmpty()) {
     const current = callstack.pop()!;
+    await waitForStep?.(memory);
 
     switch (current.kind) {
       case ASTKinds.Addition: {
