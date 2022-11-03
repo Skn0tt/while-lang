@@ -1,6 +1,5 @@
 import { describe, test } from "vitest";
-import { interpret } from "./interpreter";
-import { parse } from "./index";
+import { interpret, parse } from "./while-lang";
 
 interface Case {
   program: string;
