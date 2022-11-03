@@ -1,6 +1,5 @@
-import { parse } from "./while-lang.generated"
+import { parse as generatedParse } from "./while-lang.generated"
 
-const program = `x0 := x0 + 1`
-
-const result = parse(program)
-console.log(result)
+export function parse(program: string) {
+  return generatedParse(program.trim())
+}

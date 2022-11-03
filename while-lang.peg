@@ -1,11 +1,10 @@
-Program := '\s*' Atom | While | Concatenation
+Program := Concatenation | While | Addition | Subtraction
 
-Concatenation := Program '\s*;\s*' Program
-Atom := Addition | Subtraction
-Addition := left=Variable '\s*:=\s*' right=Variable '\s*\+\s*' c=Constant
-Subtraction := Variable '\s*:=\s*' Variable '\s*\-\s*' Constant
-Constant := _value='[0-9]+'
+Addition := '\s*' left=Variable '\s*:=\s*' right=Variable '\s*\+\s*' c=Constant
+Subtraction := '\s*' left=Variable '\s*:=\s*' right=Variable '\s*\-\s*' c=Constant
+Concatenation := '\s*' first=Program '\s*;\s*' second=Program '\s*'
+Constant := '\s*' _value='[0-9]+' '\s*'
   .value = number { return parseInt(this._value); }
-Variable := 'x'_i='[0-9]+'
+Variable := '\s*' 'x'_i='[0-9]+' '\s*'
   .i = number { return parseInt(this._i); }
-While := '\s*WHILE\s*' Variable '\s*!=\s*0\s*DO\s*' Program '\s*END\s*'
+While := '\s*WHILE\s*' v=Variable '\s*!=\s*0\s*DO\s*' body=Program '\s*END\s*'
