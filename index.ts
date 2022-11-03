@@ -91,15 +91,24 @@ self.MonacoEnvironment = {
   },
 };
 
-const defaultProgram = `
-x0 := x0 + 1;
-WHILE x0 != 0 DO
-  x1 := x1 + 1;
-END
+const fibProgram = `
+x1 := x1 - 1;
+x2 := x0 + 0;
+x3 := x0 + 1;
+WHILE x1 != 0 DO
+  x1 := x1 - 1;
+  x4 := x3 + 0;
+  WHILE x2 != 0 DO
+    x2 := x2 - 1;
+    x3 := x3 + 1
+  END;
+  x2 := x4 + 0
+END;
+x0 := x3 + 0
 `.trim();
 
 const editor = monaco.editor.create(document.getElementById("editor")!, {
-  value: defaultProgram,
+  value: fibProgram,
   language: "WHILE",
 });
 

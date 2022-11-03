@@ -150,6 +150,104 @@ const cases: Record<string, Case> = {
       },
     },
   },
+  looping: {
+    program: `
+    x0 := x0 + 1;
+    WHILE x0 != 0 DO
+      x1 := x1 + 1
+    END
+    `,
+    expectedOutput: {
+      kind: "Concatenation",
+      first: {
+        kind: "Addition",
+        left: {
+          kind: "Variable",
+          i: 0,
+          _i: "0",
+        },
+        right: {
+          kind: "Variable",
+          i: 0,
+          _i: "0",
+        },
+        c: {
+          kind: "Constant",
+          value: 1,
+          _value: "1",
+        },
+      },
+      second: {
+        kind: "While",
+        v: {
+          kind: "Variable",
+          i: 0,
+          _i: "0",
+        },
+        body: {
+          kind: "Addition",
+          left: {
+            kind: "Variable",
+            i: 1,
+            _i: "1",
+          },
+          right: {
+            kind: "Variable",
+            i: 1,
+            _i: "1",
+          },
+          c: {
+            kind: "Constant",
+            value: 1,
+            _value: "1",
+          },
+        },
+      },
+    },
+  },
+  fib: {
+    program: `
+      x1 := x1 - 1;
+      x2 := x0 + 0;
+      x3 := x0 + 1;
+      WHILE x1 != 0 DO
+        x1 := x1 - 1;
+        x4 := x3 + 0;
+        WHILE x2 != 0 DO
+          x2 := x2 - 1;
+          x3 := x3 + 1
+        END;
+        x2 := x4 + 0
+      END;
+      x0 := x3 + 0
+    `,
+    testComputations: [
+      {
+        input: [1],
+        output: 1,
+      },
+      {
+        input: [2],
+        output: 1,
+      },
+      {
+        input: [3],
+        output: 2,
+      },
+      {
+        input: [4],
+        output: 3,
+      },
+      {
+        input: [5],
+        output: 5,
+      },
+      {
+        input: [6],
+        output: 8,
+      },
+    ],
+  },
   subtract: {
     program: `
       x0 := x0 + 0;
@@ -172,7 +270,6 @@ for (const [
   name,
   { program, expectedOutput, testComputations },
 ] of Object.entries(cases)) {
-  if (name != "subtract") continue;
   describe(name, () => {
     test("parser", (t) => {
       const { errs, ast } = parse(program);
@@ -183,12 +280,16 @@ for (const [
       }
     });
 
-    describe("computations", () => {
-      testComputations?.forEach(({ input, output }, i) => {
-        test(`#${i}`, (t) => {
-          t.expect(interpret(parse(program).ast!, input)).toEqual(output);
+    if (testComputations && testComputations.length > 0) {
+      describe("computations", () => {
+        testComputations.forEach(({ input, output }, i) => {
+          test(`#${i}`, async (t) => {
+            t.expect(await interpret(parse(program).ast!, input)).toEqual(
+              output
+            );
+          });
         });
       });
-    });
+    }
   });
 }
